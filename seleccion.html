@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Carrera y Talleres</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('fondo.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            margin-left: 50px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-top: 15px;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form id="seleccionForm">
+        <h2>Selecciona tu Carrera, Turno, Sede y Taller</h2>
+
+        <label for="carrera">Carrera:</label>
+        <select id="carrera" name="carrera" required>
+            <option value="">Seleccione su carrera...</option>
+            <option value="ing_industrial">Ingeniería Industrial</option>
+            <option value="ing_electrica">Ingeniería Eléctrica</option>
+            <option value="ing_civil">Ingeniería Civil</option>
+            <option value="ing_software">Ingeniería de Software</option>
+            <option value="ing_sistema">Ingeniería de Sistemas</option>
+            <option value="administracion">Administración</option>
+            <option value="banca_finanzas">Banca y Finanzas</option>
+            <option value="mecanica">Mecánica</option>
+            <option value="medicina">Medicina</option>
+            <option value="diseño_grafico">Diseño Gráfico</option>
+            <option value="diseño_textil">Diseño Textil</option>
+            <option value="mecatronica">Mecatrónica</option>
+            <option value="ciberseguridad">Ciberseguridad</option>
+        </select>
+
+        <label for="Turno">Turno:</label>
+        <select id="Turno" name="Turno" required>
+            <option value="">Seleccione su Turno...</option>
+            <option value="mañana">Mañana</option>
+            <option value="tarde">Tarde</option>
+            <option value="noche">Noche</option>
+        </select>
+
+        <label for="sede">Sede:</label>
+        <select id="sede" name="sede" required>
+            <option value="">Seleccione su sede...</option>
+            <option value="lima_centro">Lima Centro</option>
+            <option value="independencia">Independencia</option>
+            <option value="ventanilla">Ventanilla</option>
+            <option value="surquillo">Surquillo</option>
+            <option value="cañete">Cañete</option>
+            <option value="san_martin">San Martín</option>
+            <option value="huara">Huara</option>
+            <option value="villa_salvador">Villa El Salvador</option>
+        </select>
+
+        <label for="taller">Taller:</label>
+        <select id="taller" name="taller" required>
+            <option value="">Seleccione su taller...</option>
+            <option value="futbol">Fútbol</option>
+            <option value="voley">Vóley</option>
+            <option value="basquetbol">Básquetbol</option>
+            <option value="ajedrez">Ajedrez</option>
+            <option value="pintura">Pintura</option>
+            <option value="guitarra">Guitarra</option>
+            <option value="defensa_personal">Defensa Personal</option>
+            <option value="fortalecimiento_cuerpo">Fortalecimiento del Cuerpo</option>
+        </select>
+
+        <button type="button" onclick="procesarSeleccion()">Confirmar Selección</button>
+    </form>
+</div>
+
+<!-- Modal de usuario creado -->
+<div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="usuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="usuarioModalLabel">Cuenta creada exitosamente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="modalMensaje">
+                <!-- Mensaje de usuario y contraseña -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="redirigirALogin()">Iniciar sesión</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function procesarSeleccion() {
+    const carrera = document.getElementById("carrera").value;
+    const sede = document.getElementById("sede").value;
+    const taller = document.getElementById("taller").value;
+    
+    if (carrera && sede && taller) {
+        // Recuperar el documento y fecha de nacimiento del localStorage
+        const documento = localStorage.getItem("documento");
+        const fechaNacimiento = localStorage.getItem("fecha-nacimiento");
+        
+        // Genera usuario y contraseña
+        const usuario = "00" + documento;
+        const contraseña = fechaNacimiento.replace(/-/g, "");
+        
+        // Guarda en localStorage y muestra los datos en el modal
+        document.getElementById("modalMensaje").innerHTML = `<p>Usuario: ${usuario}</p><p>Contraseña: ${contraseña}</p>`;
+        new bootstrap.Modal(document.getElementById('usuarioModal')).show();
+    } else {
+        alert("Por favor, complete todas las selecciones.");
+    }
+}
+
+
+    function redirigirALogin() {
+        window.location.href = "inicia.html";
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Panel de menú lateral */
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            color: #ffffff;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item:hover {
+            background-color: #495057;
+            border-radius: 5px;
+            padding-left: 10px;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Estilo para el botón de cerrar sesión */
+        .logout {
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Menú</h2>
+    <div class="search-bar">
+        <input type="text" placeholder="Buscar..." aria-label="Buscar">
+    </div>
+    <a href="#" class="menu-item" onclick="showSection('miPerfil')">Mi Perfil</a>
+    <a href="#" class="menu-item" onclick="showSection('misCursos')">Mis Cursos</a>
+    <a href="#" class="menu-item" onclick="showSection('miHorario')">Mi Horario</a>
+    <a href="#" class="menu-item" onclick="showSection('noticias')">Noticias</a>
+    <a href="#" class="menu-item" onclick="showSection('biblioteca')">Biblioteca</a>
+    <a href="#" class="menu-item logout" onclick="cerrarSesion()">Cerrar Sesión</a>
+</div>
+
+<div class="main-content">
+    <div id="miPerfil" class="section">
+        <h3 class="section-title">Mi Perfil</h3>
+        <!-- Contenedor para mostrar los datos personales -->
+        <div id="perfilDatos">
+            <p>Aquí encontrarás la información de tu perfil.</p>
+        </div>
+    </div>
+    <div id="misCursos" class="section" style="display: none;">
+        <h3 class="section-title">Mis Cursos</h3>
+        <p>Estos son los cursos en los que estás inscrito.</p>
+    </div>
+    <div id="miHorario" class="section" style="display: none;">
+        <h3 class="section-title">Mi Horario</h3>
+        <p>Consulta tu horario de clases aquí.</p>
+    </div>
+    <div id="noticias" class="section" style="display: none;">
+        <h3 class="section-title">Noticias</h3>
+        <p>Entérate de las últimas noticias y actualizaciones.</p>
+    </div>
+    <div id="biblioteca" class="section" style="display: none;">
+        <h3 class="section-title">Biblioteca</h3>
+        <p>Explora la biblioteca digital de recursos.</p>
+    </div>
+</div>
+
+<script>
+    function cargarDatosPerfil() {
+        // Obtiene los datos de localStorage
+        const nombre = localStorage.getItem("nombre") || "N/A";
+        const apellidoPaterno = localStorage.getItem("apellidoPaterno") || "N/A";
+        const apellidoMaterno = localStorage.getItem("apellidoMaterno") || "N/A";
+        const tipoDocumento = localStorage.getItem("tipoDocumento") || "N/A";
+        const documento = localStorage.getItem("documento") || "N/A";
+        const fechaNacimiento = localStorage.getItem("fechaNacimiento") || "N/A";
+        const telefono = localStorage.getItem("telefono") || "N/A";
+        const email = localStorage.getItem("email") || "N/A";
+        const carrera = localStorage.getItem("carrera") || "N/A"; // Nueva línea para obtener la carrera
+
+        // Muestra los datos en el contenedor de perfil
+        document.getElementById("perfilDatos").innerHTML = `
+            <p><strong>Nombre:</strong> ${nombre}</p>
+            <p><strong>Apellido Paterno:</strong> ${apellidoPaterno}</p>
+            <p><strong>Apellido Materno:</strong> ${apellidoMaterno}</p>
+            <p><strong>Tipo de Documento:</strong> ${tipoDocumento}</p>
+            <p><strong>Número de Documento:</strong> ${documento}</p>
+            <p><strong>Fecha de Nacimiento:</strong> ${fechaNacimiento}</p>
+            <p><strong>Teléfono:</strong> ${telefono}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Carrera:</strong> ${carrera}</p> <!-- Nueva línea para mostrar la carrera -->
+        `;
+    }
+
+    // Llama a cargarDatosPerfil cuando la página se carga
+    document.addEventListener("DOMContentLoaded", function() {
+        cargarDatosPerfil();
+    });
+
+    function showSection(sectionId) {
+        // Ocultar todas las secciones
+        document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
+        
+        // Mostrar la sección seleccionada
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    function cerrarSesion() {
+        // Redirigir a la página de inicio de sesión
+        window.location.href = 'inicia.html';
+    }
+</script>
+
+</body>
+</html>

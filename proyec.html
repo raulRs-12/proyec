@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Matrícula</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('fondo.jpg'); /* Reemplaza 'nombre-de-tu-imagen.jpg' con el nombre de tu archivo de imagen */
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 20px;
+            height: 100vh; /* Asegura que el fondo ocupe toda la altura de la ventana */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco con transparencia */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px; /* Define un ancho máximo para el formulario */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-group-half {
+            flex: 1;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Matrículate ya en el mejor instituto</h2>
+    <form id="matriculaForm">
+        <div class="form-row">
+            <div class="form-group form-group-half">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Juan" required>
+            </div>
+            <div class="form-group form-group-half">
+                <label for="apellido-paterno">Apellido Paterno:</label>
+                <input type="text" id="apellido-paterno" name="apellido-paterno" placeholder="Sanchez" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group form-group-half">
+                <label for="apellido-materno">Apellido Materno:</label>
+                <input type="text" id="apellido-materno" name="apellido-materno" placeholder="Quispe" required>
+            </div>
+            <div class="form-group form-group-half">
+                <label for="tipo-documento">Tipo de Documento:</label>
+                <select id="tipo-documento" name="tipo-documento" onchange="mostrarCampoDocumento()" required>
+                    <option value="">Seleccione...</option>
+                    <option value="dni">DNI</option>
+                    <option value="carnet">Carnet de Extranjería</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group hidden" id="campo-dni">
+            <label for="dni">Número de DNI:</label>
+            <input type="number" id="dni" name="dni" placeholder="12345678" minlength="8" maxlength="8" oninput="validarLongitud(this)">
+        </div>
+
+        <div class="form-group hidden" id="campo-carnet">
+            <label for="carnet">Número de Carnet de Extranjería:</label>
+            <input type="number" id="carnet" name="carnet" placeholder="987654321" minlength="9" maxlength="9" oninput="validarLongitud(this)">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group form-group-half">
+                <label for="fecha-nacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" required>
+            </div>
+            <div class="form-group form-group-half">
+                <label for="telefono">Número Telefónico:</label>
+                <input type="number" id="telefono" name="telefono" placeholder="999-999-999" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" placeholder="correo@example.com" required>
+        </div>
+
+        <button type="button" onclick="generarCuenta()">Enviar</button>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="usuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="usuarioModalLabel">Cuenta creada exitosamente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="modalMensaje">
+                <!-- Aquí se mostrará el mensaje del usuario y contraseña -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="redirigirALogin()">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mostrarCampoDocumento() {
+        const tipoDocumento = document.getElementById("tipo-documento").value;
+        const campoDNI = document.getElementById("campo-dni");
+        const campoCarnet = document.getElementById("campo-carnet");
+
+        campoDNI.classList.add("hidden");
+        campoCarnet.classList.add("hidden");
+
+        if (tipoDocumento === "dni") {
+            campoDNI.classList.remove("hidden");
+        } else if (tipoDocumento === "carnet") {
+            campoCarnet.classList.remove("hidden");
+        }
+    }
+
+    function validarLongitud(input) {
+        const maxLength = input.getAttribute("maxlength");
+        if (input.value.length > maxLength) {
+            input.value = input.value.slice(0, maxLength);
+        }
+    }
+
+    function generarCuenta() {
+        const nombre = document.getElementById("nombre").value;
+        const apellidoPaterno = document.getElementById("apellido-paterno").value;
+        const apellidoMaterno = document.getElementById("apellido-materno").value;
+        const tipoDocumento = document.getElementById("tipo-documento").value;
+        const documento = tipoDocumento === 'dni' ? document.getElementById("dni").value : document.getElementById("carnet").value;
+        const fechaNacimiento = document.getElementById("fecha-nacimiento").value;
+        const telefono = document.getElementById("telefono").value;
+        const email = document.getElementById("email").value;
+
+        if (documento && fechaNacimiento) {
+            // Almacena los datos personales en localStorage
+            localStorage.setItem("nombre", nombre);
+            localStorage.setItem("apellidoPaterno", apellidoPaterno);
+            localStorage.setItem("apellidoMaterno", apellidoMaterno);
+            localStorage.setItem("tipoDocumento", tipoDocumento);
+            localStorage.setItem("documento", documento);
+            localStorage.setItem("fechaNacimiento", fechaNacimiento);
+            localStorage.setItem("telefono", telefono);
+            localStorage.setItem("email", email);
+
+            window.location.href = "seleccion.html"; // Redirige a la página de selección
+        } else {
+            alert("Por favor, complete todos los campos.");
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
