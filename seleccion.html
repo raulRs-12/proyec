@@ -147,27 +147,30 @@
 
 <script>
     function procesarSeleccion() {
-    const carrera = document.getElementById("carrera").value;
-    const sede = document.getElementById("sede").value;
-    const taller = document.getElementById("taller").value;
-    
-    if (carrera && sede && taller) {
-        // Recuperar el documento y fecha de nacimiento del localStorage
-        const documento = localStorage.getItem("documento");
-        const fechaNacimiento = localStorage.getItem("fecha-nacimiento");
-        
-        // Genera usuario y contraseña
-        const usuario = "00" + documento;
-        const contraseña = fechaNacimiento.replace(/-/g, "");
-        
-        // Guarda en localStorage y muestra los datos en el modal
-        document.getElementById("modalMensaje").innerHTML = `<p>Usuario: ${usuario}</p><p>Contraseña: ${contraseña}</p>`;
-        new bootstrap.Modal(document.getElementById('usuarioModal')).show();
-    } else {
-        alert("Por favor, complete todas las selecciones.");
-    }
-}
+        const carrera = document.getElementById("carrera").value;
+        const turno = document.getElementById("Turno").value;
+        const sede = document.getElementById("sede").value;
+        const taller = document.getElementById("taller").value;
 
+        if (carrera && turno && sede && taller) {
+            // Guarda el turno en localStorage
+            localStorage.setItem("turno", turno);
+
+            // Recuperar el documento y fecha de nacimiento del localStorage
+            const documento = localStorage.getItem("documento");
+            const fechaNacimiento = localStorage.getItem("fecha-nacimiento");
+
+            // Genera usuario y contraseña
+            const usuario = "00" + documento;
+            const contraseña = fechaNacimiento.replace(/-/g, "");
+
+            // Muestra los datos en el modal
+            document.getElementById("modalMensaje").innerHTML = `<p>Usuario: ${usuario}</p><p>Contraseña: ${contraseña}</p>`;
+            new bootstrap.Modal(document.getElementById('usuarioModal')).show();
+        } else {
+            alert("Por favor, complete todas las selecciones.");
+        }
+    }
 
     function redirigirALogin() {
         window.location.href = "inicia.html";

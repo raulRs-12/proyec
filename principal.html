@@ -71,11 +71,34 @@
             color: #333;
         }
 
+        /* Horarios */
+        .horario-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .horario-cuadro {
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            flex: 1 0 200px;
+            max-width: 200px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
         /* Estilo para el botón de cerrar sesión */
         .logout {
             margin-top: auto;
             padding-top: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .course-list {
+            padding-left: 20px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -97,18 +120,24 @@
 <div class="main-content">
     <div id="miPerfil" class="section">
         <h3 class="section-title">Mi Perfil</h3>
-        <!-- Contenedor para mostrar los datos personales -->
         <div id="perfilDatos">
             <p>Aquí encontrarás la información de tu perfil.</p>
         </div>
     </div>
     <div id="misCursos" class="section" style="display: none;">
         <h3 class="section-title">Mis Cursos</h3>
-        <p>Estos son los cursos en los que estás inscrito.</p>
+        <ul class="course-list">
+            <li>Matemática</li>
+            <li>Comunicación</li>
+            <li>Desarrollo Personal</li>
+            <li>Introducción a tu Carrera</li>
+        </ul>
     </div>
     <div id="miHorario" class="section" style="display: none;">
         <h3 class="section-title">Mi Horario</h3>
-        <p>Consulta tu horario de clases aquí.</p>
+        <div id="horario" class="horario-container">
+            <!-- Los horarios se generan dinámicamente -->
+        </div>
     </div>
     <div id="noticias" class="section" style="display: none;">
         <h3 class="section-title">Noticias</h3>
@@ -122,7 +151,6 @@
 
 <script>
     function cargarDatosPerfil() {
-        // Obtiene los datos de localStorage
         const nombre = localStorage.getItem("nombre") || "N/A";
         const apellidoPaterno = localStorage.getItem("apellidoPaterno") || "N/A";
         const apellidoMaterno = localStorage.getItem("apellidoMaterno") || "N/A";
@@ -131,9 +159,8 @@
         const fechaNacimiento = localStorage.getItem("fechaNacimiento") || "N/A";
         const telefono = localStorage.getItem("telefono") || "N/A";
         const email = localStorage.getItem("email") || "N/A";
-        const carrera = localStorage.getItem("carrera") || "N/A"; // Nueva línea para obtener la carrera
+        const carrera = localStorage.getItem("carrera") || "N/A";
 
-        // Muestra los datos en el contenedor de perfil
         document.getElementById("perfilDatos").innerHTML = `
             <p><strong>Nombre:</strong> ${nombre}</p>
             <p><strong>Apellido Paterno:</strong> ${apellidoPaterno}</p>
@@ -143,25 +170,56 @@
             <p><strong>Fecha de Nacimiento:</strong> ${fechaNacimiento}</p>
             <p><strong>Teléfono:</strong> ${telefono}</p>
             <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Carrera:</strong> ${carrera}</p> <!-- Nueva línea para mostrar la carrera -->
+            <p><strong>Carrera:</strong> ${carrera}</p>
         `;
     }
 
-    // Llama a cargarDatosPerfil cuando la página se carga
-    document.addEventListener("DOMContentLoaded", function() {
+    function generarHorario() {
+        const turno = localStorage.getItem("turno") || "mañana"; // Valor predeterminado
+        const horarioContainer = document.getElementById("horario");
+
+        const horarios = {
+            mañana: [
+                { hora: "7:00 - 8:00 AM", curso: "Matemática" },
+                { hora: "8:00 - 9:00 AM", curso: "Comunicación" },
+                { hora: "9:00 - 10:00 AM", curso: "Desarrollo Personal" },
+                { hora: "10:00 - 11:00 AM", curso: "Introducción a tu Carrera" }
+            ],
+            tarde: [
+                { hora: "12:00 - 1:00 PM", curso: "Comunicación" },
+                { hora: "1:00 - 2:00 PM", curso: "Matemática" },
+                { hora: "2:00 - 3:00 PM", curso: "Introducción a tu Carrera" },
+                { hora: "3:00 - 4:00 PM", curso: "Desarrollo Personal" }
+            ],
+            noche: [
+                { hora: "6:00 - 7:00 PM", curso: "Matemática" },
+                { hora: "7:00 - 8:00 PM", curso: "Introducción a tu Carrera" },
+                { hora: "8:00 - 9:00 PM", curso: "Desarrollo Personal" },
+                { hora: "9:00 - 10:00 PM", curso: "Comunicación" }
+            ]
+        };
+
+        horarioContainer.innerHTML = horarios[turno]
+            .map(item => `
+                <div class="horario-cuadro">
+                    <p><strong>${item.hora}</strong></p>
+                    <p>${item.curso}</p>
+                </div>
+            `)
+            .join("");
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
         cargarDatosPerfil();
+        generarHorario();
     });
 
     function showSection(sectionId) {
-        // Ocultar todas las secciones
         document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
-        
-        // Mostrar la sección seleccionada
         document.getElementById(sectionId).style.display = 'block';
     }
 
     function cerrarSesion() {
-        // Redirigir a la página de inicio de sesión
         window.location.href = 'inicia.html';
     }
 </script>
